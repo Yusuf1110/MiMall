@@ -1,4 +1,5 @@
 <template>
+<!-- 只能有一个根元素 -->
   <div class="header">
     <div class="nav-topbar">
       <div class="container">
@@ -149,9 +150,10 @@ export default {
           pageSize:6
         }
       }).then((res)=>{
-      if(res.list.length>=6){
-        this.phoneList = res.list.slice(0,6);
-      }
+        this.phoneList=res.list;
+      // if(res.list.length>=6){
+      //   this.phoneList = res.list.slice(0,6);
+      // }
       })
     },
     goToCart(){
