@@ -3,10 +3,10 @@ module.exports = {
         host: 'localhost',
         port: 8081,
         proxy: {
-            '/api': {
-                target: 'https://www.imooc.com',
+            '/api': { //“/api”这个是为了后面路由方便
+                target: 'http://mall-pre.springboot.cn',
                 changeOrigin: true,
-                pathRewrite: {
+                pathRewrite: { //后面会干掉它
                     '/api': ''
                 }
             }
