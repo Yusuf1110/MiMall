@@ -21,10 +21,33 @@ export default {
     // this.axios.get("/user/login").then((res) => {
     //   this.res = res;
     // });
+    //this.getUser();
+    this.getCartCount();
+  },
+  methods: {
+    getUser() {
+      this.axios.get("/user").then((res) => { //  /user 有问题
+        window.console.log(res);
+        this.$store.dispatch("saveUserName", res.username);
+      });
+    },
+    getCartCount() {
+      this.axios.get("/carts/products/sum").then((res) => {
+                window.console.log(res);
+        this.$store.dispatch('getCartCount',res);
+      });
+    },
   },
 };
 </script>
 
-<style>
+<style lang="scss">
+//引入注意顺序
+
 @import "./assets/scss/reset.scss";
+@import "./assets/scss/mixin.scss";
+@import "./assets/scss/config.scss";
+@import "./assets/scss/base.scss";
+@import "./assets/scss/button.scss";
+@import "./assets/scss/modal.scss";
 </style>

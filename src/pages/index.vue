@@ -60,12 +60,12 @@
           v-for="(item, index) in adsList"
           :key="index"
         >
-          <img :src="item.img" alt="" />
+          <img v-lazy="item.img" alt="" />
         </a>
       </div>
       <div class="banner">
         <a href="/#/product/30">
-          <img src="/imgs/banner-1.png" alt="" />
+          <img v-lazy="'/imgs/banner-1.png'" alt="" />
         </a>
       </div>
     </div>
@@ -76,20 +76,20 @@
         <div class="wrapper">
           <div class="banner-left">
             <a href="/#/product/35">
-              <img src="imgs/mix-alpha.jpg" alt="" />
+              <img v-lazy="'imgs/mix-alpha.jpg'" alt="" />
             </a>
           </div>
           <div class="list-box">
             <div class="list" v-for="(arr, index) in phoneList" :key="index">
               <div class="item" v-for="(item, j) in arr" :key="j">
-                <span>新品</span>
+                <span :class="{ 'new-pro': j % 2 == 0 }">新品</span>
                 <div class="item-img">
-                  <img src="" alt="" />
+                  <img v-lazy="item.mainImage" alt="" />
                 </div>
                 <div class="item-info">
-                  <h3>小米9</h3>
-                  <p>骁龙855，索尼4800万超广角微距</p>
-                  <p class="price">2999</p>
+                  <h3>{{ item.name }}</h3>
+                  <p>{{ item.subtitle }}</p>
+                  <p class="price" @click="addCart">{{ item.price }}元</p>
                 </div>
               </div>
             </div>
@@ -98,11 +98,25 @@
       </div>
     </div>
     <service-bar></service-bar>
+    <modal
+      title="提示"
+      sureText="查看购物车"
+      btnType="3"
+      modalType="middle"
+      :showModal="showModal"
+      @submit="goToCart"
+      @cancel="cancel"
+    >
+      <template v-slot:body>
+        <p>商品添加成功！</p>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
 import ServiceBar from "../components/ServiceBar.vue";
+import Modal from "../components/Modal.vue";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
 
@@ -110,6 +124,7 @@ export default {
   name: "index",
   components: {
     ServiceBar,
+    Modal,
     Swiper,
     SwiperSlide,
   },
@@ -204,16 +219,46 @@ export default {
           img: "/imgs/ads/ads-4.jpg",
         },
       ],
-      phoneList: [
-        [1, 1, 1, 1],
-        [1, 1, 1, 1],
-      ],
+      phoneList: [],
+      showModal: false,
     };
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      this.axios
+        .get("/products", {
+          params: {
+            categoryId: 100012,
+            pageSize: 14,
+          },
+        })
+        .then((res) => {
+          this.phoneList = [res.list.slice(6, 10), res.list.slice(10, 14)];
+        });
+    },
+    addCart() {
+      this.showModal = true;
+      // this.axios.post('/carts',{
+      //   product:id,
+      //   selected:true
+      // }).then((res)=>{
+      // })
+    },
+    goToCart() {
+      this.$router.push("/cart");
+    },
+    cancel() {
+      this.showModal = false;
+    },
   },
 };
 </script>
 <style lang="scss" >
 @import "../assets/scss/config.scss";
+@import "../assets/scss/base.scss";
 @import "../assets/scss/mixin.scss";
 //最好从根路径开始定义，避免污染其他组件
 .index {
@@ -307,7 +352,8 @@ export default {
     }
   }
   .banner {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
+    margin-top: 20px;
   }
   .product-box {
     background-color: $colorJ;
@@ -343,22 +389,23 @@ export default {
             height: 302px;
             text-align: center;
             span {
-              display:inline-block ; //span是行内元素，只有文字，没有外围的block，所以得设为inline-block后面设width才有用
+              display: inline-block; //span是行内元素，只有文字，没有外围的block，所以得设为inline-block后面设width才有用
               width: 67px;
-              height:24px;
+              height: 24px;
               font-size: 14px;
-              line-height: 24px;  // 可以实现文本居中
+              line-height: 24px; // 可以实现文本居中
               color: $colorG;
-              &.new-pro{
+              &.new-pro {
                 background-color: #7ecf68;
               }
-              &.kill-pro{
+              &.kill-pro {
                 background-color: #e82626;
               }
             }
             .item-img {
               img {
                 height: 195px;
+                width: 190px;
               }
             }
             .item-info {
@@ -378,7 +425,8 @@ export default {
                 font-size: $fontJ;
                 font-weight: bold;
                 cursor: pointer;
-                &::after { //& 表示上一级选择器
+                &::after {
+                  //& 表示上一级选择器
                   @include bgImg(22px, 22px, "/imgs/icon-cart-hover.png");
                   content: " ";
                   margin-left: 5px;

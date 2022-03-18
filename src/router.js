@@ -1,5 +1,5 @@
 import Router from "vue-router";
-import Vue from "vue"
+import Vue from "vue";
 import Home from "./pages/home";
 import Index from "./pages/index";
 import Product from "./pages/product";
@@ -9,7 +9,8 @@ import Order from "./pages/order";
 import OrderConfirm from "./pages/orderConfirm";
 import OrderList from "./pages/orderList";
 import OrderPay from "./pages/orderPay";
-import AliPay from './pages/alipay'
+import AliPay from "./pages/alipay";
+import Login from "./pages/login";
 
 Vue.use(Router);
 
@@ -35,6 +36,11 @@ export default new Router({
                     component: Detail,
                 },
             ],
+        },
+        {
+            path: "/login",
+            name: "login",
+            component: Login,
         },
         {
             path: "/cart",
@@ -64,8 +70,8 @@ export default new Router({
                     path: "alipay",
                     name: "alipay",
                     component: AliPay,
-                }
-            ]
-        }
-    ]
+                },
+            ],
+        },
+    ],
 });
