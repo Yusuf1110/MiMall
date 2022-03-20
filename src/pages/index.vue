@@ -89,7 +89,7 @@
                 <div class="item-info">
                   <h3>{{ item.name }}</h3>
                   <p>{{ item.subtitle }}</p>
-                  <p class="price" @click="addCart">{{ item.price }}元</p>
+                  <p class="price" @click="addCart(item.id)">{{ item.price }}元</p>
                 </div>
               </div>
             </div>
@@ -108,7 +108,7 @@
       @cancel="cancel"
     >
       <template v-slot:body>
-        <p>商品添加成功！</p>
+        <p>{{isShowModule}}</p>
       </template>
     </modal>
   </div>
@@ -221,7 +221,13 @@ export default {
       ],
       phoneList: [],
       showModal: false,
+      addSuccess :false,
     };
+  },
+  computed:{
+    isShowModule:function(){
+      return this.addSuccess?"加入购物车成功！":"添加失败！";
+    }
   },
   mounted() {
     this.init();
@@ -239,13 +245,20 @@ export default {
           this.phoneList = [res.list.slice(6, 10), res.list.slice(10, 14)];
         });
     },
-    addCart() {
-      this.showModal = true;
-      // this.axios.post('/carts',{
-      //   product:id,
-      //   selected:true
-      // }).then((res)=>{
-      // })
+    addCart(id) {
+      this.axios
+        .post("/carts", {
+          productId: id,
+          selected: true,
+        })
+        .then((res) => {
+          this.showModal = true;
+          this.addSuccess = true;
+          this.$store.dispatch("saveCartCount", res.cartProductVoList.quantity);
+        }).catch(()=>{
+          this.addSuccess = false;
+          this.showModal = true;
+        });
     },
     goToCart() {
       this.$router.push("/cart");

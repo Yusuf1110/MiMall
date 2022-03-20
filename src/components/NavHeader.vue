@@ -155,7 +155,7 @@ export default {
   },
   methods: {
     backLogin() {
-      this.$router.push("login");
+      this.$router.push({ path: '/login' });
     },
     getProductList() {
       this.axios

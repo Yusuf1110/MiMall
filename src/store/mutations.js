@@ -1,8 +1,11 @@
+/**
+ * 商城Vuex-mutations
+ */
 export default {
     saveUserName(state, username) {
         state.username = username;
     },
-    getCartCount(state, cartCount) {
-        state.cartCount = cartCount;
+    saveCartCount(state, count) {
+        state.cartCount = count;
     }
 }

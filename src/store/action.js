@@ -1,8 +1,11 @@
+/**
+ * 商城Vuex-actions
+ */
 export default {
     saveUserName(context, username) {
-        context.commit("saveUserName", username);
+        context.commit('saveUserName', username);
     },
-    getCartCount(context, cartCount) {
-        context.commit("getCartCount", cartCount);
+    saveCartCount(context, count) {
+        context.commit('saveCartCount', count);
     }
 }

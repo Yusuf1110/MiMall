@@ -18,10 +18,14 @@
             <input type="text" placeholder="请输入账号" v-model="username" />
           </div>
           <div class="input">
-            <input type="text" placeholder="请输入密码" v-model="password" />
+            <input
+              type="password"
+              placeholder="请输入密码"
+              v-model="password"
+            />
           </div>
           <div class="btn-box" @click="login">
-            <a href="javascript:;" class="btn" >登录</a>
+            <a href="javascript:;" class="btn">登录</a>
           </div>
           <div class="tips">
             <div class="sms" @click="register">手机短信登录/注册</div>
@@ -56,29 +60,33 @@ export default {
   },
   methods: {
     register() {
-      const {username,password}=this;
+      const { username, password } = this;
       this.axios
         .post("/user/register", {
           username,
           password,
-          email: "much@163.com",
+          email: "181110@163.com",
         })
         .then(() => {
           alert("注册成功");
         });
     },
     login() {
-       const { username, password } = this; //es6语法/也可以用username=this.username;
+      let { username, password } = this; //es6语法/也可以用username=this.username;
       this.axios
         .post("/user/login", {
           username, //这里是因为key值和上面的一样所以可以简写/ username:username
-          password
-          
+          password,
         })
         .then((res) => {
           this.$cookie.set("userId", res.id, { expires: "1M" });
-          this.$store.dispatch('saveUserName',res.username);
-          this.$router.push("/index/");   
+          this.$store.dispatch("saveUserName", res.username);
+          this.$router.push({
+            name: "index",
+            params: {
+              from: "login",
+            },
+          });
         });
     },
   },
