@@ -254,7 +254,7 @@ export default {
         .then((res) => {
           this.showModal = true;
           this.addSuccess = true;
-          this.$store.dispatch("saveCartCount", res.cartProductVoList.quantity);
+          this.$store.dispatch("saveCartCount", res.cartTotalQuantity);
         }).catch(()=>{
           this.addSuccess = false;
           this.showModal = true;

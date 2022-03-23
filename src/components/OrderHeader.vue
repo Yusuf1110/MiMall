@@ -2,9 +2,7 @@
   <div class="order-header">
     <div class="container clearfix">
       <div class="left">
-        <div class="log fl">
-          <a href="/#/index"></a>
-        </div>
+        <div class="header-logo fl"><a href="/#/index"></a></div>
         <div class="title fl">
           <h2>{{ title }} <slot name="tip"></slot></h2>
         </div>
@@ -39,16 +37,8 @@ export default {
     height: 55px;
     line-height: 55px;
   }
-  .log,
   .title {
     display: inline-block;
-  }
-  a {
-    @include bgImg(55px, 55px, "../../public/imgs/mi-home.png", 55px);
-    background-color: $colorA;
-  }
-  .title {
-    float: left;
     margin-left: 54px;
     h2 {
       font-size: 28px;

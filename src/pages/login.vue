@@ -65,7 +65,7 @@ export default {
         .post("/user/register", {
           username,
           password,
-          email: "181110@163.com",
+          email: "yusuf@163.com",
         })
         .then(() => {
           alert("注册成功");
@@ -79,7 +79,7 @@ export default {
           password,
         })
         .then((res) => {
-          this.$cookie.set("userId", res.id, { expires: "1M" });
+          this.$cookie.set("userId", res.id, { expires: "Session" });
           this.$store.dispatch("saveUserName", res.username);
           this.$router.push({
             name: "index",

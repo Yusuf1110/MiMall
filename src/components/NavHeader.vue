@@ -12,9 +12,10 @@
         <div class="topbar-user">
           <a href="javascript:;" v-if="username">{{ username }}</a>
           <a href="javascript:;" v-if="!username" @click="backLogin">登录</a>
+          <a href="javascript:;" v-if="username" @click="outLogin">退出登录</a>
           <a href="javascript:;">我的订单</a>
           <a href="javascript:;" class="my-cart" @click="goToCart"
-            ><span class="icon-cart"></span>购物车{{cartCount}}</a
+            ><span class="icon-cart"></span>购物车{{ cartCount }}</a
           >
         </div>
       </div>
@@ -141,21 +142,36 @@ export default {
       return "￥" + val.toFixed(2) + "元";
     },
   },
-  computed:{  //因为在渲染时先获取了空的undefine的值，渲染好了才计算出username,所以在这里使用计算属性，一旦username改变，就会重新计算赋值；
-    username(){
+  computed: {
+    //因为在渲染时先获取了空的undefine的值，渲染好了才计算出username,所以在这里使用计算属性，一旦username改变，就会重新计算赋值；
+    username() {
       return this.$store.state.username;
     },
-    cartCount(){
-      let count =this.$store.state.cartCount;
-      return count!==undefined? "("+this.$store.state.cartCount+")":"(0)";
-    }
+    cartCount() {
+      let count = this.$store.state.cartCount;
+      return count !== undefined
+        ? "( " + this.$store.state.cartCount + " )"
+        : "( 0 )";
+    },
   },
   mounted() {
     this.getProductList();
+    if (this.$route.params.from == "login") {
+      this.getCartCount();
+    }
   },
   methods: {
     backLogin() {
-      this.$router.push({ path: '/login' });
+      this.$router.push({ path: "/login" });
+    },
+    outLogin() {
+      this.axios.post("/user/logout").then(() => {
+        this.$store.dispatch("saveUserName", "");
+        this.$store.dispatch("saveCartCount", 0);
+        this.$cookie.set("userId", "", { expires: -1 });
+        this.$router.push("/login");
+        this.$Message.success("退出成功");
+      });
     },
     getProductList() {
       this.axios
@@ -167,10 +183,13 @@ export default {
         })
         .then((res) => {
           this.phoneList = res.list;
-          // if(res.list.length>=6){
-          //   this.phoneList = res.list.slice(0,6);
-          // }
         });
+    },
+    getCartCount() {
+      this.axios.get("/carts/products/sum").then((res) => {
+        // window.console.log(res);
+        this.$store.dispatch("saveCartCount", res);
+      });
     },
     goToCart() {
       this.$router.push("/cart");

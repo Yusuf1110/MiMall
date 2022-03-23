@@ -3,9 +3,10 @@ import router from "./router";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import store from "./store";
-import App from "./App.vue";
+import { Message } from "element-ui"
 import VueLazyload from "vue-lazyload";
 import VueCookie from "vue-cookie";
+import App from "./App.vue";
 //import env from './env'
 
 //mock开关
@@ -25,23 +26,22 @@ axios.interceptors.response.use(function(response) {
     let res = response.data;
     if (res.status == 0) {
         return res.data;
+    } else if (res.status == 10) {
+        if (location.hash != "#/index/") {
+            window.location.href = "/#/login";
+        }
+        return Promise.reject();
+    } else {
+        this.$Message.error(res.msg);
+        return Promise.reject();
     }
-    // } else if (res.status == 10) {
-    //     if (location.hash != "#/index/") {
-    //         window.location.href = "/#/login";
-    //     }
-    //     return Promise.reject();
-    // } else {
-    //     alert(res.msg);
-    //     return Promise.reject();
-    // }
 });
 Vue.use(VueLazyload, {
     loading: "/imgs/loading-svg/loading-bars.svg",
 });
 Vue.use(VueAxios, axios);
 Vue.use(VueCookie);
-
+Vue.prototype.$Message = Message;
 Vue.config.productionTip = false;
 
 new Vue({
