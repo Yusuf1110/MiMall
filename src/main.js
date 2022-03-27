@@ -30,11 +30,16 @@ axios.interceptors.response.use(function(response) {
         if (location.hash != "#/index/") {
             window.location.href = "/#/login";
         }
-        return Promise.reject();
+        return Promise.reject(res);
     } else {
         this.$Message.error(res.msg);
-        return Promise.reject();
+        return Promise.reject(res);
     }
+}, function(err) {
+    let res = err.response;
+    Message.error(res.data.message);
+    return Promise.reject(err)
+
 });
 Vue.use(VueLazyload, {
     loading: "/imgs/loading-svg/loading-bars.svg",

@@ -1,5 +1,10 @@
 <template>
   <div class="order-confirm">
+    <order-header title="订单确认">
+      <template slot="tip">
+        <span>请认真填写收货地址</span>
+      </template>
+    </order-header>
     <svg
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +144,9 @@
           </div>
           <div class="btn-group">
             <a href="/#/cart" class="btn btn-default btn-large">返回购物车</a>
-            <a href="javascript:;" class="btn btn-large" @click="orderSubmit">去结算</a>
+            <a href="javascript:;" class="btn btn-large" @click="orderSubmit"
+              >去结算</a
+            >
           </div>
         </div>
       </div>
@@ -220,9 +227,10 @@
 
 <script>
 import Modal from "./../components/Modal";
+import OrderHeader from "../components/OrderHeader.vue";
 export default {
   name: "order-confirm",
-  components: { Modal },
+  components: { Modal, OrderHeader },
   data() {
     return {
       ediTitle: "",

@@ -4,8 +4,8 @@
     transition: all 0.5s;
     .mask {
         @include position(fixed);
-        background-color: $colorI;
         opacity: 50%;
+        background-color: $colorI;
     }
     &.slide-enter-active {
         top: 0;
