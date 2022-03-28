@@ -62,6 +62,7 @@
             <video
               src="/imgs/product/video.mp4"
               muted
+              preload:none
               autoplay
               controls="controls"
             ></video>

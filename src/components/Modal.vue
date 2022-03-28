@@ -28,7 +28,7 @@
           >
           <div class="btn-group" v-if="btnType == 3">
             <a href="javascript:;" class="btn" @click="$emit('submit')">{{sureText}}</a>
-            <a href="javascript:;" class="btn" @click="$emit('cancel')">{{canclText}}</a>
+            <a href="javascript:;" class="btn" @click="$emit('cancel')">{{cancelText}}</a>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@ export default {
       type: String,
       default: "确定",
     },
-    canclText: {
+    cancelText: {
       type: String,
       default: "取消",
     },
@@ -63,3 +63,57 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+@import "./../assets/scss/config.scss";
+@import "./../assets/scss/mixin.scss";
+  .modal {
+    @include position(fixed);
+    z-index: 15;
+    transition: all 0.5s;
+    .mask {
+        @include position(fixed);
+        opacity: 50%;
+        background-color: $colorI;
+    }
+    &.slide-enter-active {
+        top: 0;
+    }
+    &.slide-leave-active {
+        top: -100%;
+    }
+    &.slide-enter {
+        //顺序有影响enter在下面
+        top: -100%;
+    }
+    .modal-dialog {
+        @include position(absolute, 50%, 35%, 660px, auto);
+        background-color: $colorG;
+        transform: translate(-50%, -50%);
+        .modal-header {
+            display: relative;
+            height: 60px;
+            background-color: $colorJ;
+            padding: 0 25px;
+            line-height: 60px;
+            font-size: $fontI;
+            .icon-close {
+                @include positionImg(absolute, 23px, 25px, 14px, 14px, "/imgs/icon-close.png");
+                transition: all 200ms;
+                &:hover {
+                    transform: scale(1.5); //放大1.5倍
+                }
+            }
+        }
+        .modal-body {
+            padding: 42px 40px 54px;
+            font-size: $fontJ;
+        }
+        .modal-footer {
+            height: 82px;
+            line-height: 82px;
+            text-align: center;
+            background-color: $colorJ;
+        }
+    }
+}
+</style>

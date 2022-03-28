@@ -12,5 +12,9 @@ module.exports = {
             }
 
         }
-    }
+    },
+    productionSourceMap: false, //不需要生产环境的 source map，去除js.map文件安全且减少了包的大小
+    chainWebpack: (config) => {
+        config.plugins.delete('prefetch'); //消除预加载，实现真正的按需加载
+    },
 }
